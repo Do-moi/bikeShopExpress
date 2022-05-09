@@ -1,0 +1,30 @@
+body {
+  font-family: "Darker Grotesque", sans-serif;
+}
+
+a,
+a:hover {
+  color: white;
+}
+
+#picture-header {
+  background-image: url("../images/bike-background.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 150px;
+}
+
+.card {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.imgshop {
+  width: 170px;
+}
+h2 {
+  color: red;
+}
+.radioButton {
+  position: relative !important;
+  
+}

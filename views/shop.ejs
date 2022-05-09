@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="icon" href="../images/bike-logo.svg">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="stylesheet" href="../stylesheets/style.css" />
+  <link href="https://fonts.googleapis.com/css?family=Darker+Grotesque&display=swap" rel="stylesheet" />
+  <title>BikeShop - Shop</title>
+  <script src="https://kit.fontawesome.com/f523297bc0.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+        <nav class="col-12 navbar navbar-expand-lg navbar-dark bg-dark ">
+          <a class="navbar-brand" href="/">
+            <img src="../images/bike-logo.svg" width="50" height="50" class="logo" alt="" />
+          The Bike Shop Experience
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav ">
+                <li class="nav-item active ">
+                  <a class="nav-link mb-1" href="/">Home </a>
+                </li>
+            </div>
+          </div>
+        </nav>
+    </div>
+    <div class="row">
+      <h1>Basket</h1>
+    </div>
+  <% if (dataBasket.length < 1) {%>
+  <h2 class="text-center">No article in the basket</h2>
+  <%}else{%>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Picture</th>
+            <th scope="col">Model</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+            <th scope="col">Total</th>
+            <th scope="col">Suppr</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- boucle dataBasket -->
+          <% var totalCmd=0;
+            for(var i = 0; i<dataBasket.length ; i++){%>
+
+          <tr>
+            <th scope="row"><%= i+1 %></th>
+            <td><img class="imgshop" src="<%=dataBasket[i].url%>" /></td>
+            <td><%=dataBasket[i].name %></td>
+            <td>
+              <form action="/update" method="POST">
+                <input  type="number" class="pb-1"name="quantity" min="1" max="10" value=<%=dataBasket[i].quantity %> required>
+                <input type="hidden" name="position" value="<%=i%>">
+                <button type="submit" class="btn btn-outline-primary btn-sm">
+                  <i class="fas fa-sync-alt"></i>
+                </button>
+              </form>
+            </td>
+            <td><%=dataBasket[i].price%>€</td>
+            <!-- colonne total pour chaque velo -->
+            <td><%= dataBasket[i].price * dataBasket[i].quantity %>€</td>
+            <td>
+              <a href="/delete?deletePosition=<%=i %>"><button type="button" class="btn btn-outline-primary btn-sm"><i
+                    class="fas fa-trash-alt"></i></button></a>
+            </td>
+          </tr>
+          <% }%>
+
+          
+          <form id="formML" action="/method-livraison" method="post">
+            <% 
+            for(var i = 0; i< listeModeLivraison.length ; i++){ 
+              let libelle = listeModeLivraison[i].montant +" €";
+              if (listeModeLivraison[i].montant == 0){
+                libelle = "frais de port offert"
+              }
+
+              let check = "";
+              if (selectedModeLivraison.id == listeModeLivraison[i].id){
+                check = "checked"
+              }%>
+          <tr>
+            <th scope="row"></th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td> 
+              <input class="radioButton  form-check-input  " type="radio" name="modeLivraison" id="exampleRadios1" value="<%= listeModeLivraison[i].id %>" <%=check%>>
+              <label class="form-check-label" for="exampleRadios1"><%=listeModeLivraison[i].name %></label>
+            </td>
+            <td><%=libelle %></td>
+            <td></td>
+          </tr>
+        <%}%>
+        </form>
+          <tr>
+            <th scope="row"></th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="total-box">Total Basket : </td>
+            <td><%= totalCommande %>€</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row ">
+      <div class="col-3 offset-3 col-md-3 offset-md-9 col-lg-3 offset-lg-9 pl-4">
+          <form action="/create-checkout-session" method="POST">
+            <button type="submit" class="btn btn-primary ml-5">Checkout</button>
+          </form>
+      </div>
+    </div>
+
+  <%}%>
+    <script src="/javascript/javascript.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+  </div>
+</body>
+
+</html>
